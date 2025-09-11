@@ -29,7 +29,7 @@ type ReminderStatus = "PENDING" | "DONE" | "SNOOZED" | "CANCELED";
 
 // Type assertion for the JSON data
 const seedData = seedDataRaw as {
-  user: {
+  userProfile: {
     id: string;
     email: string;
     name: string;
@@ -94,10 +94,10 @@ const seedData = seedDataRaw as {
 const seedUsers = async () => {
   console.log("🌱 Seeding users...");
   try {
-    const user = await db.user.upsert({
-      where: { email: seedData.user.email },
-      create: seedData.user,
-      update: seedData.user,
+    const user = await db.userProfile.upsert({
+      where: { email: seedData.userProfile.email },
+      create: seedData.userProfile,
+      update: seedData.userProfile,
     });
     console.log(`✅ User seeded: ${user.email} (${user.id})`);
     return { success: true, data: user, error: null };
@@ -526,7 +526,7 @@ export async function GET(request: NextRequest) {
         totalItems > 0 ? Math.round((totalSeeded / totalItems) * 100) : 0,
     },
     results,
-    user:
+    userProfile:
       userResult.success && userResult.data
         ? { id: userResult.data.id, email: userResult.data.email }
         : null,
