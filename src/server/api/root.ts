@@ -8,6 +8,7 @@ import { qualifyingRouter } from "./routers/f1/qualifying";
 import { racesRouter } from "./routers/f1/races";
 import { resultsRouter } from "./routers/f1/results";
 import { pitstopsRouter } from "./routers/f1/pitstops";
+import { userProfileRouter } from "./routers/userProfile";
 
 /**
  * This is the primary router for your server.
@@ -23,6 +24,7 @@ export const appRouter = createTRPCRouter({
   qualifying: qualifyingRouter,
   races: racesRouter,
   results: resultsRouter,
+  userProfile: userProfileRouter,
 });
 
 // export type definition of API
