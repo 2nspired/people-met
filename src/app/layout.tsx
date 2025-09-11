@@ -5,6 +5,7 @@ import type { Viewport } from "next/types";
 import { Geist } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { UserProfileProvider } from "~/contexts/UserProfileProvider";
 
 import { TRPCReactProvider } from "~/trpc/react";
 
@@ -65,9 +66,11 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${geist.variable} antialiased`}>
       <body>
-        <TRPCReactProvider>{children}</TRPCReactProvider>
-        <Analytics />
-        <SpeedInsights />
+        <TRPCReactProvider>
+          <UserProfileProvider>{children}</UserProfileProvider>
+          <Analytics />
+          <SpeedInsights />
+        </TRPCReactProvider>
       </body>
     </html>
   );
