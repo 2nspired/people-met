@@ -1,0 +1,277 @@
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider  = "postgresql"
+    url       = env("DATABASE_URL")
+    directUrl = env("DIRECT_URL")
+}
+
+// ===== Enums =====
+enum ContactType {
+    EMAIL
+    PHONE
+    INSTAGRAM
+    WHATSAPP
+    TELEGRAM
+    X
+    LINKEDIN
+    WEBSITE
+    OTHER
+}
+
+enum SocialType {
+    INSTAGRAM
+    X
+    LINKEDIN
+    FACEBOOK
+    TIKTOK
+    YOUTUBE
+    WEBSITE
+    OTHER
+}
+
+enum AttachmentType {
+    IMAGE
+    VIDEO
+    AUDIO
+    FILE
+    LINK
+}
+
+enum ReminderStatus {
+    PENDING
+    DONE
+    SNOOZED
+    CANCELED
+}
+
+enum SourceType {
+    MANUAL
+    IMPORT
+    SYNC
+}
+
+// ===== Auth/Profile (public) =====
+// IMPORTANT: id must equal auth.users.id (UUID). Do NOT default it here.
+model User {
+    id        String   @id @db.Uuid
+    email     String   @unique
+    name      String?
+    imageUrl  String?
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    people     Person[]
+    encounters Encounter[] @relation("EncounterCreatedBy")
+    tags       Tag[]
+    groups     Group[]
+    reminders  Reminder[]
+}
+
+// ===== People & Organization =====
+model Person {
+    id         String   @id @default(uuid())
+    userId     String   @db.Uuid
+    name       String
+    nickname   String?
+    phonetic   String? // e.g., "sue-ZAHN-uh"
+    notes      String?
+    isFavorite Boolean  @default(false)
+    isArchived Boolean  @default(false)
+    createdAt  DateTime @default(now())
+    updatedAt  DateTime @updatedAt
+
+    owner       User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+    encounters  Encounter[]
+    contacts    ContactMethod[]
+    socials     SocialProfile[]
+    tags        PersonTag[]
+    groups      PersonGroup[]
+    attachments PersonAttachment[]
+    reminders   Reminder[]
+
+    @@unique([userId, name, nickname])
+    @@index([userId])
+    @@index([name])
+}
+
+model Tag {
+    id        String   @id @default(uuid())
+    userId    String   @db.Uuid
+    name      String
+    color     String?
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    owner   User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+    persons PersonTag[]
+
+    @@unique([userId, name])
+    @@index([userId, name])
+}
+
+model PersonTag {
+    personId String
+    tagId    String
+
+    person Person @relation(fields: [personId], references: [id], onDelete: Cascade)
+    tag    Tag    @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+    @@id([personId, tagId])
+    @@index([tagId])
+}
+
+// Lightweight grouping (e.g., "Yoga Class", "Bali Trip")
+model Group {
+    id        String   @id @default(uuid())
+    userId    String   @db.Uuid
+    name      String
+    notes     String?
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    owner   User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+    persons PersonGroup[]
+
+    @@unique([userId, name])
+    @@index([userId, name])
+}
+
+model PersonGroup {
+    personId String
+    groupId  String
+
+    person Person @relation(fields: [personId], references: [id], onDelete: Cascade)
+    group  Group  @relation(fields: [groupId], references: [id], onDelete: Cascade)
+
+    @@id([personId, groupId])
+    @@index([groupId])
+}
+
+// ===== Encounters =====
+model Encounter {
+    id          String     @id @default(uuid())
+    personId    String
+    createdById String     @db.Uuid // who logged it
+    happenedAt  DateTime
+    title       String?
+    note        String?
+    source      SourceType @default(MANUAL)
+
+    // simple location fields
+    locationText String?
+    latitude     Decimal? @db.Decimal(9, 6)
+    longitude    Decimal? @db.Decimal(9, 6)
+    placeId      String?
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    person      Person                @relation(fields: [personId], references: [id], onDelete: Cascade)
+    createdBy   User                  @relation("EncounterCreatedBy", fields: [createdById], references: [id], onDelete: Cascade)
+    attachments EncounterAttachment[]
+    reminders   Reminder[]
+
+    @@index([personId, happenedAt])
+    @@index([createdById])
+    @@index([happenedAt])
+}
+
+// ===== Contacts & Socials =====
+model ContactMethod {
+    id        String      @id @default(uuid())
+    personId  String
+    type      ContactType
+    value     String // phone/email/@handle/url
+    label     String?
+    isPrimary Boolean     @default(false)
+    createdAt DateTime    @default(now())
+    updatedAt DateTime    @updatedAt
+
+    person Person @relation(fields: [personId], references: [id], onDelete: Cascade)
+
+    @@unique([personId, type, value])
+    @@index([personId, type])
+}
+
+model SocialProfile {
+    id        String     @id @default(uuid())
+    personId  String
+    type      SocialType
+    handle    String?
+    url       String?
+    createdAt DateTime   @default(now())
+    updatedAt DateTime   @updatedAt
+
+    person Person @relation(fields: [personId], references: [id], onDelete: Cascade)
+
+    @@unique([personId, type, handle])
+    @@index([personId, type])
+}
+
+// ===== Notes & Attachments =====
+model PersonAttachment {
+    id        String         @id @default(uuid())
+    personId  String
+    type      AttachmentType
+    url       String
+    title     String?
+    meta      Json?
+    createdAt DateTime       @default(now())
+
+    person Person @relation(fields: [personId], references: [id], onDelete: Cascade)
+
+    @@index([personId, type])
+}
+
+model EncounterAttachment {
+    id          String         @id @default(uuid())
+    encounterId String
+    type        AttachmentType
+    url         String
+    title       String?
+    meta        Json?
+    createdAt   DateTime       @default(now())
+
+    encounter Encounter @relation(fields: [encounterId], references: [id], onDelete: Cascade)
+
+    @@index([encounterId, type])
+}
+
+// ===== Reminders =====
+model Reminder {
+    id          String         @id @default(uuid())
+    userId      String         @db.Uuid
+    personId    String?
+    encounterId String?
+    dueAt       DateTime
+    status      ReminderStatus @default(PENDING)
+    note        String?
+    createdAt   DateTime       @default(now())
+    updatedAt   DateTime       @updatedAt
+
+    owner     User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+    person    Person?    @relation(fields: [personId], references: [id], onDelete: SetNull)
+    encounter Encounter? @relation(fields: [encounterId], references: [id], onDelete: SetNull)
+
+    @@index([userId, dueAt])
+    @@index([personId])
+    @@index([encounterId])
+}
+
+// ===== Lightweight Audit (optional) =====
+model EventLog {
+    id        String   @id @default(uuid())
+    userId    String   @db.Uuid
+    entity    String // "Person", "Encounter", etc.
+    entityId  String
+    action    String // "CREATE", "UPDATE", "MERGE"
+    meta      Json?
+    createdAt DateTime @default(now())
+
+    @@index([userId, entity, entityId])
+}

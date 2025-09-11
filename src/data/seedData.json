@@ -1,0 +1,213 @@
+{
+    "user": {
+      "id": "00000000-0000-0000-0000-000000000001",
+      "email": "dev@example.com",
+      "name": "Dev User",
+      "imageUrl": null
+    },
+    "tags": [
+      "Bali",
+      "Hawaiʻi",
+      "Yoga",
+      "Coworking",
+      "Surf",
+      "Gym",
+      "Travel"
+    ],
+    "groups": [
+      {
+        "name": "Bali Trip 2025",
+        "notes": "People I met around Uluwatu/Canggu"
+      },
+      {
+        "name": "Honolulu Yoga",
+        "notes": "Studio crew"
+      },
+      {
+        "name": "Coworking Ohana",
+        "notes": "Regulars at the space"
+      }
+    ],
+    "people": [
+      {
+        "name": "Zhuzhanna",
+        "phonetic": "sue-ZAHN-uh",
+        "notes": "Met at Uluwatu clifftop; laughed about name pronunciation.",
+        "tags": ["Bali", "Travel"],
+        "groups": ["Bali Trip 2025"],
+        "socials": [
+          {
+            "type": "INSTAGRAM",
+            "handle": "zhuzhanna.waves",
+            "url": "https://instagram.com/zhuzhanna.waves"
+          }
+        ],
+        "encounters": [
+          {
+            "happenedAt": "2025-07-25T10:30:00.000Z",
+            "title": "Sunset chat at Uluwatu",
+            "note": "Talked surfing and cafés; recommended Suka Espresso.",
+            "locationText": "Uluwatu Cliff",
+            "latitude": -8.8294,
+            "longitude": 115.084
+          }
+        ]
+      },
+      {
+        "name": "Elisabeth",
+        "nickname": "German dietitian",
+        "notes": "Funny; discussed nutrition for surf recovery.",
+        "tags": ["Bali", "Surf", "Gym"],
+        "groups": ["Bali Trip 2025"],
+        "contacts": [
+          {
+            "type": "EMAIL",
+            "value": "elisabeth.diet@example.com",
+            "label": "work",
+            "isPrimary": true
+          }
+        ],
+        "encounters": [
+          {
+            "happenedAt": "2025-07-28T08:00:00.000Z",
+            "title": "Post-surf smoothie",
+            "note": "Shared electrolyte recipe ideas.",
+            "locationText": "Canggu",
+            "latitude": -8.6478,
+            "longitude": 115.1385
+          }
+        ]
+      },
+      {
+        "name": "Hugh",
+        "nickname": "Irish guy Ash",
+        "notes": "From Ash; easygoing; surfed with Thomas.",
+        "tags": ["Surf", "Travel"],
+        "encounters": [
+          {
+            "happenedAt": "2025-07-30T06:30:00.000Z",
+            "title": "Early surf session",
+            "note": "Worked on bottom turns; shoulder-high.",
+            "locationText": "Canggu Sand Bar",
+            "latitude": -8.651,
+            "longitude": 115.13
+          }
+        ]
+      },
+      {
+        "name": "Jacob",
+        "nickname": "Aussie guy Julia",
+        "notes": "Travels with Julia; into skate and coding.",
+        "tags": ["Travel", "Coworking"],
+        "groups": ["Coworking Ohana"],
+        "socials": [
+          {
+            "type": "LINKEDIN",
+            "url": "https://www.linkedin.com/in/jacob-dev"
+          }
+        ],
+        "encounters": [
+          {
+            "happenedAt": "2025-08-04T12:00:00.000Z",
+            "title": "Coworking intro",
+            "note": "Talked Next.js and PWA sync.",
+            "locationText": "Dojo Coworking (Bali)",
+            "latitude": -8.6475,
+            "longitude": 115.138
+          }
+        ]
+      },
+      {
+        "name": "Ashley",
+        "nickname": "stewardess",
+        "notes": "Great sense of humor.",
+        "isFavorite": true,
+        "tags": ["Travel"],
+        "contacts": [
+          {
+            "type": "INSTAGRAM",
+            "value": "@ash_upintheair",
+            "label": "personal",
+            "isPrimary": true
+          }
+        ],
+        "encounters": [
+          {
+            "happenedAt": "2025-08-08T18:30:00.000Z",
+            "title": "Airport coffee",
+            "note": "Swapped airline tips.",
+            "locationText": "DPS",
+            "latitude": -8.748169,
+            "longitude": 115.167488
+          }
+        ]
+      },
+      {
+        "name": "Gina Luca",
+        "notes": "Lived in Hawaiʻi, plays guitar; very cool.",
+        "tags": ["Hawaiʻi", "Travel", "Yoga"],
+        "groups": ["Honolulu Yoga"],
+        "contacts": [
+          {
+            "type": "PHONE",
+            "value": "+1-808-555-1212",
+            "label": "mobile",
+            "isPrimary": true
+          }
+        ],
+        "socials": [
+          {
+            "type": "INSTAGRAM",
+            "handle": "gina.strums",
+            "url": "https://instagram.com/gina.strums"
+          }
+        ],
+        "encounters": [
+          {
+            "happenedAt": "2025-09-03T03:00:00.000Z",
+            "title": "Sunset walk",
+            "note": "Talked music and surf lineups.",
+            "locationText": "Ala Moana Beach Park",
+            "latitude": 21.2849,
+            "longitude": -157.8453,
+            "attachments": [
+              {
+                "type": "IMAGE",
+                "url": "https://picsum.photos/seed/alamona/800/600",
+                "title": "Sunset"
+              }
+            ]
+          }
+        ],
+        "attachments": [
+          {
+            "type": "LINK",
+            "url": "https://open.spotify.com/",
+            "title": "Playlist idea"
+          }
+        ]
+      }
+    ],
+    "reminders": [
+      {
+        "note": "Review People Met and add phonetics.",
+        "dueAt": "2025-09-15T12:00:00.000Z",
+        "status": "PENDING"
+      },
+      {
+        "note": "Follow up with Elisabeth about nutrition tips.",
+        "dueAt": "2025-09-20T12:00:00.000Z",
+        "status": "PENDING"
+      }
+    ],
+    "eventLogs": [
+      {
+        "entity": "Seed",
+        "entityId": "init",
+        "action": "CREATE",
+        "meta": {
+          "message": "Initial seed complete"
+        }
+      }
+    ]
+  }

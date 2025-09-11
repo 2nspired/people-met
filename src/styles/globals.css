@@ -1,0 +1,36 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans:
+    var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
+@theme {
+  --breakpoint-3xl: 120rem;
+  --breakpoint-4xl: 150rem;
+}
+
+@layer utilities {
+  .container {
+    @apply mx-auto max-w-full px-4 sm:px-6 lg:px-8;
+  }
+  .flex-col-center {
+    @apply flex flex-col items-center justify-center;
+  }
+  .flex-row-center {
+    @apply flex flex-row items-center justify-center;
+  }
+  .flex-col-between {
+    @apply flex flex-col items-center justify-between;
+  }
+  .flex-row-between {
+    @apply flex flex-row items-center justify-between;
+  }
+  .flex-col-around {
+    @apply flex flex-col items-center justify-around;
+  }
+  .flex-row-around {
+    @apply flex flex-row items-center justify-around;
+  }
+}

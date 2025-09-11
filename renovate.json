@@ -1,0 +1,40 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:base"],
+  "schedule": ["before 4am on monday"],
+  "timezone": "America/New_York",
+  "packageRules": [
+    {
+      "matchDepTypes": ["devDependencies"],
+      "groupName": "dev dependencies",
+      "groupSlug": "dev-deps"
+    },
+    {
+      "matchPackageNames": ["@types/node", "@types/react", "@types/react-dom"],
+      "groupName": "type definitions",
+      "groupSlug": "types"
+    },
+    {
+      "matchPackageNames": ["eslint", "typescript-eslint", "eslint-config-next"],
+      "groupName": "ESLint packages",
+      "groupSlug": "eslint"
+    },
+    {
+      "matchPackageNames": ["tailwindcss", "@tailwindcss/postcss", "postcss"],
+      "groupName": "Tailwind CSS packages",
+      "groupSlug": "tailwind"
+    },
+    {
+      "matchPackageNames": ["prisma", "@prisma/client"],
+      "groupName": "Prisma packages",
+      "groupSlug": "prisma"
+    },
+    {
+      "matchPackageNames": ["@trpc/server", "@trpc/client", "@trpc/react-query"],
+      "groupName": "tRPC packages",
+      "groupSlug": "trpc"
+    }
+  ],
+  "prConcurrentLimit": 3,
+  "prHourlyLimit": 2
+}
