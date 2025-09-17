@@ -4,8 +4,6 @@ const urlsToCache = [
   "/",
   "/login",
   "/manifest.json",
-  "/icons/icon-192.png",
-  "/icons/icon-512.png",
 ];
 
 // Install Event - Cache Resources
@@ -16,8 +14,18 @@ self.addEventListener("install", (event) => {
     (async () => {
       const cache = await caches.open(CACHE_NAME);
       console.log("Service Worker: Caching files");
-      await cache.addAll(urlsToCache);
-      console.log("Service Worker: Cached files");
+      
+      // Cache each URL individually with error handling
+      for (const url of urlsToCache) {
+        try {
+          await cache.add(url);
+          console.log(`Service Worker: Cached ${url}`);
+        } catch (error) {
+          console.warn(`Service Worker: Failed to cache ${url}:`, error);
+        }
+      }
+      
+      console.log("Service Worker: Caching completed");
     })(),
   );
 });
@@ -98,16 +106,16 @@ async function staleWhileRevalidate(request) {
     await cache.put(request, responseClone);
     return networkResponse;
   } catch (error) {
-    console.error("Service Worker: Network failed in staleWhileRevalidate:", error);
-    // Return a fallback response if both cache and network fail
-    return new Response(
-      "Offline - content not available",
-      { 
-        status: 503, 
-        statusText: "Service Unavailable",
-        headers: { "Content-Type": "text/plain" }
-      }
+    console.error(
+      "Service Worker: Network failed in staleWhileRevalidate:",
+      error,
     );
+    // Return a fallback response if both cache and network fail
+    return new Response("Offline - content not available", {
+      status: 503,
+      statusText: "Service Unavailable",
+      headers: { "Content-Type": "text/plain" },
+    });
   }
 }
 
@@ -170,13 +178,10 @@ async function cacheFirst(request) {
   } catch (error) {
     console.error("Service Worker: Network failed in cacheFirst:", error);
     // Return a fallback response for static assets
-    return new Response(
-      "Asset not available offline",
-      { 
-        status: 503, 
-        statusText: "Service Unavailable",
-        headers: { "Content-Type": "text/plain" }
-      }
-    );
+    return new Response("Asset not available offline", {
+      status: 503,
+      statusText: "Service Unavailable",
+      headers: { "Content-Type": "text/plain" },
+    });
   }
 }
