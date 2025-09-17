@@ -6,11 +6,12 @@
  * TL;DR - This is where all the tRPC server stuff is created and plugged in. The pieces you will
  * need to use are documented accordingly near the end.
  */
-import { initTRPC } from "@trpc/server";
+import { initTRPC, TRPCError } from "@trpc/server";
 import superjson from "superjson";
 import { ZodError } from "zod";
 
 import { db } from "~/server/db";
+import { supabaseServerClient } from "~/utilities/supabase/server";
 
 /**
  * 1. CONTEXT
@@ -25,8 +26,16 @@ import { db } from "~/server/db";
  * @see https://trpc.io/docs/server/context
  */
 export const createTRPCContext = async (opts: { headers: Headers }) => {
+  const supabase = await supabaseServerClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
   return {
     db,
+    session: {
+      user,
+    },
     ...opts,
   };
 };
@@ -83,7 +92,7 @@ const timingMiddleware = t.middleware(async ({ next, path }) => {
   const start = Date.now();
 
   if (t._config.isDev) {
-    // artificial delay in dev
+    // FIXME: artificial delay in dev
     const waitMs = Math.floor(Math.random() * 400) + 100;
     await new Promise((resolve) => setTimeout(resolve, waitMs));
   }
@@ -104,3 +113,30 @@ const timingMiddleware = t.middleware(async ({ next, path }) => {
  * are logged in.
  */
 export const publicProcedure = t.procedure.use(timingMiddleware);
+
+/**
+ * Protected (authenticated) procedure
+ *
+ * If you want a query or mutation to ONLY be accessible to logged in users, use this. It verifies
+ * the session is valid and guarantees `ctx.user` is not null.
+ *
+ * @see https://trpc.io/docs/procedures
+ */
+export const protectedProcedure = t.procedure
+  .use(timingMiddleware)
+  .use(({ ctx, next }) => {
+    if (
+      // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
+      !ctx.session ||
+      !ctx.session.user
+    ) {
+      throw new TRPCError({ code: "UNAUTHORIZED" });
+    }
+    return next({
+      ctx: {
+        ...ctx,
+        // infers the `session` as non-nullable
+        session: { ...ctx.session, user: ctx.session.user },
+      },
+    });
+  });
