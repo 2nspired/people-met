@@ -3,10 +3,10 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
-import { createClient } from "~/utilities/supabase/server";
+import { supabaseServerClient } from "~/utilities/supabase/server";
 
 export async function login(formData: FormData) {
-  const supabase = await createClient();
+  const supabase = await supabaseServerClient();
 
   // type-casting here for convenience
   // in practice, you should validate your inputs
@@ -25,12 +25,19 @@ export async function login(formData: FormData) {
   }
 
   console.log("✅ Login successful");
+
+  // Get the user to verify session was created
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  console.log("👤 User after login:", user?.id, user?.email);
+
   revalidatePath("/", "layout");
   redirect("/");
 }
 
 export async function signup(formData: FormData) {
-  const supabase = await createClient();
+  const supabase = await supabaseServerClient();
 
   // type-casting here for convenience
   // in practice, you should validate your inputs
