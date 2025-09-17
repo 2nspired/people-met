@@ -62,7 +62,7 @@
     ],
     "lang": "en-US",
     "dir": "ltr",
-    "id": "https://www.peoplemet.com",
+    "id": "/",
     "scope": "/",
     "shortcuts": [
         {
@@ -73,7 +73,8 @@
     ],
     "related_applications": [
         {
-            "platform": "web"
+            "platform": "web",
+            "url": "/"
         }
     ],
     "prefer_related_applications": false
