@@ -2,7 +2,13 @@ import "./sw-types.d.ts";
 
 // Service Worker Version
 const CACHE_NAME = "people-met-v1";
-const urlsToCache = ["/", "/login", "/manifest.json"];
+const urlsToCache = [
+  "/", 
+  "/login", 
+  "/manifest.json",
+  "/icons/icon-192.png",
+  "/icons/icon-512.png"
+];
 
 // Install Event - Cache Resources
 self.addEventListener("install", (event) => {
@@ -105,8 +111,18 @@ async function networkFirst(request: Request): Promise<Response> {
       return cachedResponse;
     }
 
-    // Both network and cache failed
-    throw error;
+    // Both network and cache failed - return a fallback response
+    console.log("Service Worker: Both network and cache failed, returning offline fallback");
+    return new Response(
+      JSON.stringify({ 
+        error: "You're offline. Please check your connection and try again." 
+      }),
+      { 
+        status: 503, 
+        statusText: "Service Unavailable",
+        headers: { "Content-Type": "application/json" }
+      }
+    );
   }
 }
 
