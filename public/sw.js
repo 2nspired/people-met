@@ -49,6 +49,11 @@ self.addEventListener("fetch", (event) => {
     (async () => {
       const url = fetchEvent.request.url;
 
+      // Next.js static assets: Cache First (CSS, JS, fonts, images)
+      if (url.includes("/_next/static/") || url.includes("/icons/")) {
+        return await cacheFirst(fetchEvent.request);
+      }
+
       // Static content: Stale While Revalidate
       if (urlsToCache.some((cacheUrl) => url.includes(cacheUrl))) {
         return await staleWhileRevalidate(fetchEvent.request);
@@ -85,7 +90,25 @@ async function staleWhileRevalidate(request) {
     return cachedResponse;
   }
 
-  return await fetch(request);
+  try {
+    const networkResponse = await fetch(request);
+    // Cache the response for next time
+    const responseClone = networkResponse.clone();
+    const cache = await caches.open(CACHE_NAME);
+    await cache.put(request, responseClone);
+    return networkResponse;
+  } catch (error) {
+    console.error("Service Worker: Network failed in staleWhileRevalidate:", error);
+    // Return a fallback response if both cache and network fail
+    return new Response(
+      "Offline - content not available",
+      { 
+        status: 503, 
+        statusText: "Service Unavailable",
+        headers: { "Content-Type": "text/plain" }
+      }
+    );
+  }
 }
 
 async function networkFirst(request) {
@@ -134,6 +157,26 @@ async function cacheFirst(request) {
     return cachedResponse;
   }
 
-  console.log("Service Worker: Fetching from network");
-  return await fetch(request);
+  try {
+    console.log("Service Worker: Fetching from network");
+    const networkResponse = await fetch(request);
+    // Cache successful responses
+    if (networkResponse.ok) {
+      const responseClone = networkResponse.clone();
+      const cache = await caches.open(CACHE_NAME);
+      await cache.put(request, responseClone);
+    }
+    return networkResponse;
+  } catch (error) {
+    console.error("Service Worker: Network failed in cacheFirst:", error);
+    // Return a fallback response for static assets
+    return new Response(
+      "Asset not available offline",
+      { 
+        status: 503, 
+        statusText: "Service Unavailable",
+        headers: { "Content-Type": "text/plain" }
+      }
+    );
+  }
 }
