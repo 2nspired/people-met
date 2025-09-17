@@ -9,27 +9,27 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import { TRPCReactProvider } from "~/trpc/react";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://www.ENTER-URL-HERE.com"),
+  metadataBase: new URL("https://www.peoplemet.com"),
   title: {
     template: "%s - SITE NAME HERE",
     default: "TAG LINE HERE",
   },
   description: "A BRIEF DESCRIPTION OF YOUR SITE HERE.",
-  icons: {
-    icon: [
-      { url: "/icons/icon-48.png", sizes: "48x48", type: "image/png" },
-      { url: "/icons/icon-192.png", sizes: "192x192", type: "image/png" },
-      { url: "/icons/icon-512.png", sizes: "512x512", type: "image/png" },
-    ],
-    apple: [
-      { url: "/icons/icon-apple-180.png", sizes: "180x180", type: "image/png" },
-    ],
-  },
+  // icons: {
+  //   icon: [
+  //     { url: "/icons/icon-48.png", sizes: "48x48", type: "image/png" },
+  //     { url: "/icons/icon-192.png", sizes: "192x192", type: "image/png" },
+  //     { url: "/icons/icon-512.png", sizes: "512x512", type: "image/png" },
+  //   ],
+  //   apple: [
+  //     { url: "/icons/icon-apple-180.png", sizes: "180x180", type: "image/png" },
+  //   ],
+  // },
   openGraph: {
     title: "SITE NAME HERE",
     description: "A BRIEF DESCRIPTION OF YOUR SITE HERE.",
-    url: "https://www.ENTER-URL-HERE.com",
-    siteName: "SITE NAME HERE",
+    url: "https://www.peoplemet.com",
+    siteName: "People Met",
     locale: "en_US",
     type: "website",
     images: [
@@ -65,9 +65,11 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${geist.variable} antialiased`}>
       <body>
-        <TRPCReactProvider>{children}</TRPCReactProvider>
-        <Analytics />
-        <SpeedInsights />
+        <TRPCReactProvider>
+          {children}
+          <Analytics />
+          <SpeedInsights />
+        </TRPCReactProvider>
       </body>
     </html>
   );
