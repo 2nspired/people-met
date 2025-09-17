@@ -66,7 +66,7 @@ self.addEventListener("fetch", (event) => {
 });
 
 // Helper Functions
-async function staleWhileRevalidate(request: Request): Promise<Response> {
+async function staleWhileRevalidate(request) {
   const cachedResponse = await caches.match(request);
 
   if (cachedResponse) {
@@ -88,7 +88,7 @@ async function staleWhileRevalidate(request: Request): Promise<Response> {
   return await fetch(request);
 }
 
-async function networkFirst(request: Request): Promise<Response> {
+async function networkFirst(request) {
   try {
     const networkResponse = await fetch(request);
 
@@ -126,7 +126,7 @@ async function networkFirst(request: Request): Promise<Response> {
   }
 }
 
-async function cacheFirst(request: Request): Promise<Response> {
+async function cacheFirst(request) {
   const cachedResponse = await caches.match(request);
 
   if (cachedResponse) {
