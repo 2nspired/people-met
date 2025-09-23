@@ -1,7 +1,8 @@
 "use client";
 
-import { createClient } from "~/utilities/supabase/client";
 import { useState } from "react";
+
+import { createClient } from "~/utilities/supabase/client";
 
 export default function DebugAuthPage() {
   const [status, setStatus] = useState<string>("");

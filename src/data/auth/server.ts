@@ -1,12 +1,14 @@
 import "server-only";
-import { cache } from "react";
+
 import { type UserProfile as FullUserProfile } from "@prisma/client";
-import { supabaseServerClient } from "~/utilities/supabase/server";
-import { db } from "~/server/db";
 import {
   type User as SupabaseUser,
   type UserAppMetadata,
 } from "@supabase/supabase-js";
+import { cache } from "react";
+
+import { db } from "~/server/db";
+import { supabaseServerClient } from "~/utilities/supabase/server";
 
 type UserProfile = Pick<FullUserProfile, "id" | "email" | "name" | "imageUrl">;
 
@@ -25,8 +27,6 @@ export const getAuth = cache(async () => {
     data: { user },
   } = await supabase.auth.getUser();
 
-  console.log("getAuth - user", user);
-
   if (!user) {
     return {
       user: null,
@@ -40,11 +40,7 @@ export const getAuth = cache(async () => {
     select: { id: true, email: true, name: true, imageUrl: true },
   });
 
-  console.log("getAuth - profile query result:", { profile });
-  console.log("getAuth - user.id:", user.id);
-
   if (!profile) {
-    console.log("getAuth - No profile found, returning logged out state");
     return {
       user: null,
       isLoggedIn: false as const,

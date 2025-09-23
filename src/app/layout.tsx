@@ -1,13 +1,12 @@
-import "~/styles/globals.css";
-
-import { type Metadata } from "next";
-import type { Viewport } from "next/types";
 import { Geist } from "next/font/google";
+import type { Viewport } from "next/types";
+
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
+import { type Metadata } from "next";
+import "~/styles/globals.css";
 import { TRPCReactProvider } from "~/trpc/react";
-import ServiceWorkerRegistration from "~/components/ServiceWorkerRegistration";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.peoplemet.com"),
@@ -66,14 +65,13 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${geist.variable} antialiased`}>
       <head>
-        <link rel="manifest" href="/manifest.json" />
+        <link rel="manifest" href="/manifest.ts" />
       </head>
       <body>
         <TRPCReactProvider>
           {children}
           <Analytics />
           <SpeedInsights />
-          <ServiceWorkerRegistration />
         </TRPCReactProvider>
       </body>
     </html>

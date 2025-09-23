@@ -1,8 +1,8 @@
-import DevWindowBreakpoint from "~/components/DevWindowBreakpoint";
-import MaintenanceMode from "~/app/(main)/_components/MaintenanceMode";
-import { isDev, isProd } from "~/utilities/platform/platform";
 import Header from "~/app/(main)/_components/Header";
+import MaintenanceMode from "~/app/(main)/_components/MaintenanceMode";
+import DevWindowBreakpoint from "~/components/DevWindowBreakpoint";
 import { getAuth } from "~/data/auth/server";
+import { isDev, isProd } from "~/utilities/platform/platform";
 
 type LayoutProps = Readonly<{
   children: React.ReactNode;

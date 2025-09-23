@@ -15,7 +15,7 @@ export default function UserProfile({ auth }: UserProfileProps) {
         {user && (
           <>
             <div>Email: {user.email}</div>
-            <div>Name: {user.profile.name || "Not set"}</div>
+            <div>Name: {user.profile.name ?? "Not set"}</div>
             <div>ID: {user.id.slice(0, 8)}...</div>
           </>
         )}

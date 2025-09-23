@@ -1,8 +1,9 @@
+import type { JsonValue } from "@prisma/client/runtime/library";
+import { type NextRequest } from "next/server";
+
 import seedDataRaw from "~/data/seedData.json";
 import { db } from "~/server/db";
-import type { JsonValue } from "@prisma/client/runtime/library";
 import { devGuard } from "~/utilities/guard/guard";
-import { type NextRequest } from "next/server";
 
 // Type definitions based on Prisma schema
 type ContactType =
@@ -94,7 +95,7 @@ const seedData = seedDataRaw as {
 const seedUsers = async () => {
   console.log("🌱 Seeding users...");
   try {
-    const user = await db.user.upsert({
+    const user = await db.userProfile.upsert({
       where: { email: seedData.user.email },
       create: seedData.user,
       update: seedData.user,

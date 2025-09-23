@@ -1,13 +1,10 @@
-import { HydrateClient } from "~/trpc/server";
-import UserProfile from "./_components/UserProfile";
 import { getAuth } from "~/data/auth/server";
+import { HydrateClient } from "~/trpc/server";
+
+import UserProfile from "./_components/UserProfile";
 
 export default async function HomePage() {
   const auth = await getAuth();
-
-  console.log("home - auth", auth);
-  console.log("home - auth.user", auth.user);
-  console.log("home - auth.isLoggedIn", auth.isLoggedIn);
 
   return (
     <HydrateClient>

@@ -1,8 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import type { getAuth } from "~/data/auth/server";
+
 import { logout } from "~/app/auth/logout/actions";
+import type { getAuth } from "~/data/auth/server";
 
 type NavigationProps = {
   auth: Awaited<ReturnType<typeof getAuth>>;
@@ -10,9 +11,6 @@ type NavigationProps = {
 
 export default function Navigation({ auth }: NavigationProps) {
   const { user, isLoggedIn } = auth;
-
-  console.log("nav - user", user);
-  console.log("nav - isLoggedIn", isLoggedIn);
 
   const handleLogout = async () => {
     await logout();
